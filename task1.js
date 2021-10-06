@@ -1,4 +1,4 @@
-const { Transform } = require("stream");
+import { Transform } from "stream";
 
 const reverseString = (str) => {
   const reversedArr = str.split("").reverse();
