@@ -1,6 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { requestValidationMiddleware } from "../middleware";
-import userService from "./userService";
+import {
+  requestIdValidation,
+  requestBodyValidation,
+} from "../middleware";
+import userService from "../services/userService";
 
 const router = Router();
 
@@ -19,7 +22,7 @@ router
     }
   })
   .post(
-    requestValidationMiddleware,
+    requestBodyValidation,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const user = await userService.create(req.body);
@@ -32,21 +35,25 @@ router
 
 router
   .route("/:id")
-  .get(async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      const user = await userService.getById(id);
-      if (user) {
-        res.json(user);
-      } else {
-        res.status(404).send("Not Found");
+  .get(
+    requestIdValidation,
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params;
+        const user = await userService.getById(id);
+        if (user) {
+          res.json(user);
+        } else {
+          res.status(404).send("Not Found");
+        }
+      } catch (error) {
+        return next(error);
       }
-    } catch (error) {
-      return next(error);
     }
-  })
+  )
   .put(
-    requestValidationMiddleware,
+    requestIdValidation,
+    requestBodyValidation,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
@@ -61,18 +68,21 @@ router
       }
     }
   )
-  .delete(async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      const isSuccess = await userService.deleteById(id);
-      if (isSuccess) {
-        res.status(200).send("Deleted");
-      } else {
-        res.status(404).send("Not Found");
+  .delete(
+    requestIdValidation,
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { id } = req.params;
+        const isSuccess = await userService.deleteById(id);
+        if (isSuccess) {
+          res.status(200).send("Deleted");
+        } else {
+          res.status(404).send("Not Found");
+        }
+      } catch (error) {
+        return next(error);
       }
-    } catch (error) {
-      return next(error);
     }
-  });
+  );
 
 export default router;
