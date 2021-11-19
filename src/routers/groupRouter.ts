@@ -1,9 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 import {
   requestIdValidation,
-  userRequestBodyValidation,
+  groupRequestBodyValidation,
+  addUsersToGroupRequestBodyValidation,
 } from "../middleware";
-import userService from "../services/userService";
+import groupService from "../services/groupService";
 
 const router = Router();
 
@@ -11,23 +12,40 @@ router
   .route("/")
   .get(async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { loginSubstring, limit } = req.query;
-      const users = await userService.getList(
-        loginSubstring as string,
-        limit as string
-      );
-      res.json(users);
+      const groups = await groupService.getList();
+      res.json(groups);
     } catch (error) {
       return next(error);
     }
   })
   .post(
-    userRequestBodyValidation,
+    groupRequestBodyValidation,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const user = await userService.create(req.body);
-        res.status(201).json(user);
+        const group = await groupService.create(req.body);
+        res.status(201).json(group);
       } catch (error) {
+        return next(error);
+      }
+    }
+  );
+
+router
+  .route("/add-users")
+  .put(
+    addUsersToGroupRequestBodyValidation,
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const group = await groupService.addUsersToGroup(req.body);
+        if (group) {
+          res.json(group);
+        } else {
+          res.status(404).send("Not Found");
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message === "Wrong data") {
+          return res.status(400).send("All or some userIds are not existed!"); 
+        }
         return next(error);
       }
     }
@@ -40,9 +58,9 @@ router
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const user = await userService.getById(id);
-        if (user) {
-          res.json(user);
+        const group = await groupService.getById(id);
+        if (group) {
+          res.json(group);
         } else {
           res.status(404).send("Not Found");
         }
@@ -53,13 +71,13 @@ router
   )
   .put(
     requestIdValidation,
-    userRequestBodyValidation,
+    groupRequestBodyValidation,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const user = await userService.updateById(id, req.body);
-        if (user) {
-          res.json(user);
+        const group = await groupService.updateById(id, req.body);
+        if (group) {
+          res.json(group);
         } else {
           res.status(404).send("Not Found");
         }
@@ -73,7 +91,7 @@ router
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const isSuccess = await userService.deleteById(id);
+        const isSuccess = await groupService.deleteById(id);
         if (isSuccess) {
           res.status(200).send("Deleted");
         } else {

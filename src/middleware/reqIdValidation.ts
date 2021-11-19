@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 const schema = Joi.string()
   .guid({ version: ["uuidv4"] })
-  .message("Incorrect format of User ID in URL");
+  .message("Incorrect format of ID in URL");
 
 const requestIdValidation = async (
   req: Request,

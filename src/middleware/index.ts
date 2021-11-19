@@ -1,4 +1,11 @@
-import requestBodyValidation from "./reqBodyValidation";
+import userRequestBodyValidation from "./userReqBodyValidation";
+import groupRequestBodyValidation from "./groupReqBodyValidation";
 import requestIdValidation from "./reqIdValidation";
+import addUsersToGroupRequestBodyValidation from "./addUsersToGroupReqBodyValidation";
 
-export { requestBodyValidation, requestIdValidation };
+export {
+  userRequestBodyValidation,
+  groupRequestBodyValidation,
+  requestIdValidation,
+  addUsersToGroupRequestBodyValidation,
+};

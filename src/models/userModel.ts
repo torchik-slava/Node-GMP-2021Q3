@@ -1,5 +1,12 @@
-import { Model, DataTypes, Optional } from "sequelize";
-import sequelize from "../databaseInit";
+import {
+  Model,
+  DataTypes,
+  Optional,
+  HasManyGetAssociationsMixin,
+  HasManyRemoveAssociationsMixin,
+} from "sequelize";
+import sequelize from "../sequelizeInstance";
+import { GroupInstance } from "./groupModel";
 
 export interface UserAttributes {
   id: string;
@@ -13,15 +20,18 @@ export interface UserAttributes {
 export interface UserCreationAttributes
   extends Optional<UserAttributes, "id" | "isDeleted"> {}
 
-interface UserInstance
+export interface UserInstance
   extends Model<UserAttributes, UserCreationAttributes>,
-    UserAttributes {}
+    UserAttributes {
+  getGroups: HasManyGetAssociationsMixin<GroupInstance>;
+  removeGroups: HasManyRemoveAssociationsMixin<GroupInstance, string>;
+}
 
 const User = sequelize.define<UserInstance>(
   "User",
   {
     id: {
-      type: DataTypes.UUIDV4,
+      type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
@@ -35,7 +45,7 @@ const User = sequelize.define<UserInstance>(
       allowNull: false,
     },
     age: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     isDeleted: {
@@ -50,11 +60,11 @@ const User = sequelize.define<UserInstance>(
   }
 );
 
-User.prototype.toJSON =  function () {
-  const attributes  = Object.assign({}, this.get());
+User.prototype.toJSON = function () {
+  const attributes = Object.assign({}, this.get());
   delete attributes.password;
   delete attributes.isDeleted;
   return attributes;
-}
+};
 
 export default User;
