@@ -10,7 +10,7 @@ const schema = Joi.object({
   age: Joi.number().integer().min(4).max(130).required(),
 });
 
-const requestValidation = async (
+const requestBodyValidation = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -18,10 +18,10 @@ const requestValidation = async (
   const { error } = schema.validate(req.body, { allowUnknown: false });
   if (error?.isJoi) {
     const message = error.details[0].message;
-    res.status(400).json(message);
+    res.status(400).send(message);
   } else {
     next();
   }
 };
 
-export default requestValidation;
+export default requestBodyValidation;
