@@ -1,88 +1,21 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import {
   requestIdValidation,
   userRequestBodyValidation,
 } from "../middleware";
-import userService from "../services/userService";
+import userController from "./controllers/userController";
 
 const router = Router();
 
 router
   .route("/")
-  .get(async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { loginSubstring, limit } = req.query;
-      const users = await userService.getList(
-        loginSubstring as string,
-        limit as string
-      );
-      res.json(users);
-    } catch (error) {
-      return next(error);
-    }
-  })
-  .post(
-    userRequestBodyValidation,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const user = await userService.create(req.body);
-        res.status(201).json(user);
-      } catch (error) {
-        return next(error);
-      }
-    }
-  );
+  .get(userController.getList)
+  .post(userRequestBodyValidation, userController.create);
 
 router
   .route("/:id")
-  .get(
-    requestIdValidation,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { id } = req.params;
-        const user = await userService.getById(id);
-        if (user) {
-          res.json(user);
-        } else {
-          res.status(404).send("Not Found");
-        }
-      } catch (error) {
-        return next(error);
-      }
-    }
-  )
-  .put(
-    requestIdValidation,
-    userRequestBodyValidation,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { id } = req.params;
-        const user = await userService.updateById(id, req.body);
-        if (user) {
-          res.json(user);
-        } else {
-          res.status(404).send("Not Found");
-        }
-      } catch (error) {
-        return next(error);
-      }
-    }
-  )
-  .delete(
-    requestIdValidation,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { id } = req.params;
-        const isSuccess = await userService.deleteById(id);
-        if (isSuccess) {
-          res.status(200).send("Deleted");
-        } else {
-          res.status(404).send("Not Found");
-        }
-      } catch (error) {
-        return next(error);
-      }
-    }
-  );
+  .get(requestIdValidation, userController.getById)
+  .put(requestIdValidation, userRequestBodyValidation, userController.updateById)
+  .delete(requestIdValidation, userController.deleteById);
 
 export default router;
