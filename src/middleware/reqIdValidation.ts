@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
+import { BadRequestError } from "../errors";
 
 const schema = Joi.string()
   .guid({ version: ["uuidv4"] })
@@ -13,7 +14,7 @@ const requestIdValidation = async (
   const { error } = schema.validate(req.params.id);
   if (error?.isJoi) {
     const message = error.details[0].message;
-    res.status(400).send(message);
+    next(new BadRequestError(message));
   } else {
     next();
   }

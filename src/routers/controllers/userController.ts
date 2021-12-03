@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { NotFoundError } from "../../errors";
 import userService from "../../services/userService";
 
 const getList = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,15 +19,12 @@ const getById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const user = await userService.getById(id);
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send("Not Found");
-    }
+    if (!user) throw new NotFoundError();
+    res.json(user);
   } catch (error) {
     return next(error);
   }
-}
+};
 
 const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -41,11 +39,8 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const user = await userService.updateById(id, req.body);
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send("Not Found");
-    }
+    if (!user) throw new NotFoundError();
+    res.json(user);
   } catch (error) {
     return next(error);
   }
@@ -55,11 +50,8 @@ const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const isSuccess = await userService.deleteById(id);
-    if (isSuccess) {
-      res.status(200).send("Deleted");
-    } else {
-      res.status(404).send("Not Found");
-    }
+    if (!isSuccess) throw new NotFoundError();
+    res.status(200).send("Deleted");
   } catch (error) {
     return next(error);
   }

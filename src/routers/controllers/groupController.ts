@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { NotFoundError } from "../../errors";
 import groupService from "../../services/groupService";
 
 const getList = async (req: Request, res: Response, next: NextFunction) => {
@@ -14,11 +15,8 @@ const getById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const group = await groupService.getById(id);
-    if (group) {
-      res.json(group);
-    } else {
-      res.status(404).send("Not Found");
-    }
+    if (!group) throw new NotFoundError();
+    res.json(group);
   } catch (error) {
     return next(error);
   }
@@ -37,11 +35,8 @@ const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const group = await groupService.updateById(id, req.body);
-    if (group) {
-      res.json(group);
-    } else {
-      res.status(404).send("Not Found");
-    }
+    if (!group) throw new NotFoundError();
+    res.json(group);
   } catch (error) {
     return next(error);
   }
@@ -51,11 +46,8 @@ const deleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const isSuccess = await groupService.deleteById(id);
-    if (isSuccess) {
-      res.status(200).send("Deleted");
-    } else {
-      res.status(404).send("Not Found");
-    }
+    if (!isSuccess) throw new NotFoundError();
+    res.status(200).send("Deleted");
   } catch (error) {
     return next(error);
   }
@@ -64,15 +56,9 @@ const deleteById = async (req: Request, res: Response, next: NextFunction) => {
 const addUsersToGroup = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const group = await groupService.addUsersToGroup(req.body);
-    if (group) {
-      res.json(group);
-    } else {
-      res.status(404).send("Not Found");
-    }
+    if (!group) throw new NotFoundError();
+    res.json(group);
   } catch (error) {
-    if (error instanceof Error && error.message === "Wrong data") {
-      return res.status(400).send("All or some userIds are not existed!");
-    }
     return next(error);
   }
 };

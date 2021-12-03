@@ -1,4 +1,5 @@
 import groupDal from "../data-access/groupDal";
+import { BadRequestError } from "../errors";
 import { GroupAttributes, GroupCreationAttributes } from "../models/groupModel";
 import userService from "./userService";
 
@@ -37,7 +38,7 @@ const addUsersToGroup = async (associationData: {
   const { groupId, userIds } = associationData;
   const existedUserIds = await (await userService.getList()).map(user => user.id);
   const isAllIdsExist = userIds.every(id => existedUserIds.includes(id));
-  if (!isAllIdsExist) throw new Error('Wrong data');
+  if (!isAllIdsExist) throw new BadRequestError('All or some userIds are not existed! data');
   const updatedGroup = await groupDal.addUsersToGroup(groupId, userIds);
   if (updatedGroup) {
     return updatedGroup;
