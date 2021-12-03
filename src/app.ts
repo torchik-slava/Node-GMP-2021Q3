@@ -1,9 +1,11 @@
 import express from "express";
 import userRouter from "./routers/userRouter";
+import groupRouter from "./routers/groupRouter";
 
 const app = express();
 app.use(express.json());
-app.use("/user", userRouter);
+app.use("/users", userRouter);
+app.use("/groups", groupRouter);
 
 process
   .on("uncaughtException", (err: Error) => {

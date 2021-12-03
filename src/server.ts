@@ -1,16 +1,15 @@
-import { readFileSync } from "fs";
+import config from "./common/config";
 import app from "./app";
-import sequelize from "./databaseInit";
+import initDB from './db';
+
+const { PORT } = config;
 
 const start = async () => {
   try {
-    await sequelize.authenticate();
-    console.log("Connection to database has been established successfully.");
-    const init_sql_string = readFileSync("src/databaseInit.sql", "utf8");
-    await sequelize.query(init_sql_string);
-    console.log("Table 'Users' has been created successfully.");
-    app.listen(process.env.PORT, () => {
-      console.log(`Server started at http://localhost:${process.env.PORT}`);
+    await initDB();
+    
+    app.listen(PORT, () => {
+      console.log(`Server started at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error("Something went wrong:", error);
