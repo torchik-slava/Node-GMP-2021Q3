@@ -3,7 +3,7 @@ import {
   requestIdValidation,
   groupRequestBodyValidation,
   addUsersToGroupRequestBodyValidation,
-} from "../middleware";
+} from "../middleware/reqValidator";
 import groupController from "./controllers/groupController";
 
 const router = Router();

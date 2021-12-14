@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { loginRequestBodyValidation, refreshTokenRequestBodyValidation } from "../middleware";
+import {
+  loginRequestBodyValidation,
+  refreshTokenRequestBodyValidation,
+} from "../middleware/reqValidator";
 import authController from "./controllers/authController";
 
 const router = Router();
