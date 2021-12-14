@@ -20,6 +20,13 @@ const getById = async (id: string) => {
   }
 };
 
+const getByLogin = async (login: string) => {
+  const user = await userDal.getByLogin(login);
+  if (user) {
+    return user;
+  }
+};
+
 const create = async (userData: UserCreationAttributes) => {
   const { login, password, age } = userData;
   const createdUser = userDal.create({ login, password, age });
@@ -39,4 +46,4 @@ const deleteById = async (id: string) => {
   return userDal.deleteById(id);
 };
 
-export default { getList, getById, create, updateById, deleteById };
+export default { getList, getById, getByLogin, create, updateById, deleteById };

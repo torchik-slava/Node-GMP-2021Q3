@@ -1,13 +1,17 @@
 import express from "express";
 import userRouter from "./routers/userRouter";
 import groupRouter from "./routers/groupRouter";
+import authRouter from "./routers/authRouter";
 import logger from "./common/logger";
 import errorHandler from "./middleware/errorHandler";
 import requestLogger from "./middleware/reqLogger";
+import authorization from "./middleware/authorization";
 
 const app = express();
 app.use(express.json());
 app.use(requestLogger);
+app.use(authorization);
+app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/groups", groupRouter);
 app.use(errorHandler);

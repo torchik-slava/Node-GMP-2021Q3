@@ -23,6 +23,11 @@ const getById = async (id: string) =>
     include: [includeQuery],
   });
 
+const getByLogin = async (login: string) =>
+  User.findOne({
+    where: { login, isDeleted: false },
+  });
+
 const getLimitedListBySubstring = async (substring = "", limit?: number) =>
   User.findAll({
     where: { isDeleted: false, login: { [Op.substring]: substring } },
@@ -55,6 +60,7 @@ const deleteById = async (id: string) => {
 export default {
   getAll,
   getById,
+  getByLogin,
   getLimitedListBySubstring,
   create,
   updateById,
