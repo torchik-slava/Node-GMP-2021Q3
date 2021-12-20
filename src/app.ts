@@ -1,4 +1,5 @@
 import express from "express";
+import cors from 'cors';
 import userRouter from "./routers/userRouter";
 import groupRouter from "./routers/groupRouter";
 import authRouter from "./routers/authRouter";
@@ -8,6 +9,15 @@ import requestLogger from "./middleware/reqLogger";
 import authorization from "./middleware/authorization";
 
 const app = express();
+
+const corsOptions: cors.CorsOptions = {
+  origin: true,
+  methods: "GET,HEAD,PUT,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(requestLogger);
 app.use(authorization);
