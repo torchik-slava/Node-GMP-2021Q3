@@ -1,0 +1,27 @@
+[
+  {
+    "id": "2e01063b-51aa-44c9-a3b5-d56e5db7765c",
+    "name": "Group1",
+    "permissions": ["READ"]
+  },
+  {
+    "id": "7f50b154-963a-452d-b857-1605013aab5f",
+    "name": "Group2",
+    "permissions": ["READ", "WRITE"]
+  },
+  {
+    "id": "e7fe5cff-0de8-4f26-92f6-1c32fd6c25d7",
+    "name": "Group3",
+    "permissions": ["READ", "WRITE", "DELETE"]
+  },
+  {
+    "id": "3347a96f-58db-41b8-8f5f-4652186e8da9",
+    "name": "Group4",
+    "permissions": ["READ", "WRITE", "DELETE", "SHARE"]
+  },
+  {
+    "id": "ee24c4b3-8dc3-47fb-93a5-1b190813c215",
+    "name": "Group5",
+    "permissions": ["READ", "WRITE", "DELETE", "SHARE", "UPLOAD_FILES"]
+  }
+]
