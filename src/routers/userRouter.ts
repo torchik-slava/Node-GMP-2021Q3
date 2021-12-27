@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   requestIdValidation,
   userRequestBodyValidation,
-} from "../middleware";
+} from "../middleware/reqValidator";
 import userController from "./controllers/userController";
 
 const router = Router();

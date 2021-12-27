@@ -1,0 +1,44 @@
+[
+  {
+    "id": "d3df0357-c383-46c6-9f90-a206a37cef89",
+    "login": "One",
+    "password": "password1",
+    "age": 21,
+    "isDeleted": false
+  },
+  {
+    "id": "a6386145-8fdb-4b3e-838a-2d36d828b822",
+    "login": "Two",
+    "password": "password2",
+    "age": 22,
+    "isDeleted": false
+  },
+  {
+    "id": "87605f35-9901-42e1-9014-2a56dbc38ad4",
+    "login": "Three",
+    "password": "password3",
+    "age": 23,
+    "isDeleted": false
+  },
+  {
+    "id": "338883ee-19d6-40b4-9766-32b4f726d2aa",
+    "login": "Four",
+    "password": "password4",
+    "age": 24,
+    "isDeleted": false
+  },
+  {
+    "id": "a2cee924-08b3-44e0-b668-ecc7b1f84be2",
+    "login": "Five",
+    "password": "password5",
+    "age": 25,
+    "isDeleted": false
+  },
+  {
+    "id": "5570d4f4-0e0d-416a-888d-295b064e3799",
+    "login": "DeletedUser",
+    "password": "passwordDeleted",
+    "age": 0,
+    "isDeleted": true
+  }
+]
